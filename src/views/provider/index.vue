@@ -23,12 +23,24 @@
 	                <el-col :span="3"><el-button type="text" class="btn-style" @click="dialogVisible = true">More Information</el-button></el-col>
 	            </el-row>
 	        </el-card>
+	        <el-card class="card-style">
+	            <el-row :gutter="20">
+	                <el-col :span="3"><strong>Wework</strong></el-col>
+	                <el-col :span="3"><strong>Provider</strong></el-col>
+	                <el-col :span="4"><strong>延平路315号</strong></el-col>
+	                <el-col :span="5"><strong>13813838438@hotmail.com</strong></el-col>
+	                <el-col :span="3"><strong>13813838438</strong></el-col>
+	                <el-col :span="3"><el-link disabled>已确认接受</el-link></el-col>
+	                <el-col :span="3"><el-button type="text" class="btn-style" @click="dialogVisible = true">More Information</el-button></el-col>
+	            </el-row>
+	        </el-card>
+
 
 	        <!-- 显示供应商更多信息 -->
 	        <el-dialog
 			  	title="More Information"
 				:visible.sync="dialogVisible"
-				width="30%"
+				width="50%"
 				:before-close="handleClose">
 				<div class="inner">
 					<div class="item">

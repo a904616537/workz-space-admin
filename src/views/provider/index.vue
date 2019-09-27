@@ -12,26 +12,19 @@
 	                <el-col :span="3">More</el-col>
 	            </el-row>
 	        </div>
-			<el-card class="card-style">
-	            <el-row :gutter="20">
-	                <el-col :span="3"><strong>Wework</strong></el-col>
-	                <el-col :span="3"><strong>Provider</strong></el-col>
-	                <el-col :span="4"><strong>延平路315号</strong></el-col>
-	                <el-col :span="5"><strong>13813838438@hotmail.com</strong></el-col>
-	                <el-col :span="3"><strong>13813838438</strong></el-col>
-	                <el-col :span="3"><el-link disabled>已确认接受</el-link></el-col>
-	                <el-col :span="3"><el-button type="text" class="btn-style" @click="dialogVisible = true">More Information</el-button></el-col>
-	            </el-row>
-	        </el-card>
-	        <el-card class="card-style">
-	            <el-row :gutter="20">
-	                <el-col :span="3"><strong>Wework</strong></el-col>
-	                <el-col :span="3"><strong>Provider</strong></el-col>
-	                <el-col :span="4"><strong>延平路315号</strong></el-col>
-	                <el-col :span="5"><strong>13813838438@hotmail.com</strong></el-col>
-	                <el-col :span="3"><strong>13813838438</strong></el-col>
-	                <el-col :span="3"><el-link disabled>已确认接受</el-link></el-col>
-	                <el-col :span="3"><el-button type="text" class="btn-style" @click="dialogVisible = true">More Information</el-button></el-col>
+	        <el-divider></el-divider>
+			<el-card v-for="(item, index) in listData" :key="index" class="card-style">
+	            <el-row  :gutter="20" align="middle" type="flex">
+	                <el-col :span="3"><strong>{{item.company}}</strong></el-col>
+	                <el-col :span="3"><strong>{{item.first_name}} {{item.last_name}}</strong></el-col>
+	                <el-col :span="4"><strong>{{item.address_zh}}</strong></el-col>
+	                <el-col :span="5"><strong>{{item.email}}</strong></el-col>
+	                <el-col :span="3"><strong>{{item.phone}}</strong></el-col>
+	                <el-col :span="3">
+	                	<el-tag v-if="item.status" type="success">Certified</el-tag>
+	                	<el-tag v-else type="danger">Unauthorized</el-tag>
+	                </el-col>
+	                <el-col :span="3"><el-button type="text" class="btn-style" @click="() => onShow(item)">More Information</el-button></el-col>
 	            </el-row>
 	        </el-card>
 
@@ -44,25 +37,44 @@
 				:before-close="handleClose">
 				<div class="inner">
 					<div class="item">
+						<label>Workspace Name</label>
+						<p>{{showData.company}}</p>
+					</div>
+					<div class="item">
+						<label>Provider Name</label>
+						<p>{{showData.first_name}} {{showData.last_name}}</p>
+					</div>
+					<div class="item">
+						<label>Email</label>
+						<p>{{showData.email}}</p>
+					</div>
+					<div class="item">
+						<label>Phone</label>
+						<p>{{showData.phone}}</p>
+					</div>
+					<div class="item">
 						<label>Address En</label>
-						<p>Yan Ping Road NO.315</p>
+						<p>{{showData.address_en}}</p>
 					</div>
 					<div class="item">
 						<label>Address Cn</label>
-						<p>延平路315号</p>
+						<p>{{showData.address_zh}}</p>
 					</div>
 					<div class="item">
 						<label>Description En</label>
-						<p>Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315</p>
+						<p>{{showData.desc_en}}</p>
 					</div>
 					<div class="item">
 						<label>Description Cn</label>
-						<p>在延平路315号上的工作空间</p>
+						<p>{{showData.desc_zh}}</p>
 					</div>
 				</div>
-				<span slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisible = false">拒绝</el-button>
-				    <el-button type="primary" @click="dialogVisible = false">接受</el-button>
+				<span v-if="showData.status" slot="footer" class="dialog-footer">
+				    <el-button type="warning" @click="() => onDeal(true)">重置密码</el-button>
+				</span>
+				<span v-else slot="footer" class="dialog-footer">
+					<el-button @click="() => onDeal(false)">拒绝</el-button>
+				    <el-button type="primary" @click="() => onDeal(true)">接受</el-button>
 				</span>
 			</el-dialog>
 		</div>
@@ -70,20 +82,64 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { getList, validation}  from '../../api/provider'
+
 	export default {
 		data() {
 			return {
-				dialogVisible: false
+				loading       : false,
+				dialogVisible : false,
+				listData      : [],
+				showData      : {}
 			}
 		},
 		methods: {
 		    handleClose(done) {
-		        this.$confirm('确认关闭？')
-	          	.then(_ => {
 		            done();
-		        })
-		        .catch(_ => {});
+		        // this.$confirm('确认关闭？')
+	         //  	.then(_ => {
+		        //     done();
+		        // })
+		        // .catch(_ => {});
+		    },
+		    onDeal(bo) {
+		    	this.dialogVisible = false
+		    	validation({_id : this.showData._id, status : bo})
+		    	.then(doc => {
+		    		this.$message({
+	                    message: '已邮件通知！',
+	                    type: 'success'
+	                });
+	                this.getData();
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('处理失败！');
+	        	})
+		    },
+		    onShow(data) {
+		    	this.dialogVisible = true
+		    	this.showData = data;
+		    },
+		    getData() {
+		    	this.loading = true
+		    	getList()
+		    	.then(doc => {
+		    		this.listData = doc;
+		    		console.log('doc', doc)
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('数据获取失败');
+	        	})
+	        	.finally(() => {
+	                setTimeout(() => {
+	                    this.loading = false
+	                }, 500);
+	            })
 		    }
+		},
+		created() {
+			this.getData();
 		}
 	}
 </script>

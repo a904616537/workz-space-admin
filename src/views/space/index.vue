@@ -1,51 +1,39 @@
 <template>
 	<div class="app-container">
 		<div class="space">
+			<div>
+				<el-button type="primary" :loading="loading" size="medium" class="apply-btn" @click.native.prevent="getData">刷新</el-button>
+			</div>
+			<el-divider></el-divider>
 			<div class="title">
 	            <el-row :gutter="20" type="flex" align="middle">
 	                <el-col :span="3">Workspace Name</el-col>
 	                <el-col :span="3">Provider Name</el-col>
 	                <el-col :span="4">Workspace Address</el-col>
-	                <el-col :span="5">Email</el-col>
-	                <el-col :span="3">Phone</el-col>
-	                <el-col :span="3">Premium</el-col>
+	                <el-col :span="5">Pricing</el-col>
+	                <el-col :span="3">Recommend</el-col>
+	                <el-col :span="3">Status</el-col>
 	                <el-col :span="3">More</el-col>
 	            </el-row>
 	        </div>
-			<el-card class="card-style">
-	            <el-row :gutter="20">
-	                <el-col :span="3"><strong>Wework</strong></el-col>
-	                <el-col :span="3"><strong>Provider</strong></el-col>
-	                <el-col :span="4"><strong>延平路315号</strong></el-col>
-	                <el-col :span="5"><strong>13813838438@hotmail.com</strong></el-col>
-	                <el-col :span="3"><strong>13813838438</strong></el-col>
+			<el-card v-for="(item, index) in listData" :key="index" class="card-style">
+	            <el-row :gutter="20" align="middle" type="flex">
+	                <el-col :span="3"><strong>{{item.name}}</strong></el-col>
+	                <el-col :span="3"><strong>{{item.provider.first_name}} {{item.provider.last_name}}</strong></el-col>
+	                <el-col :span="4"><strong>{{item.address_zh}}</strong></el-col>
+	                <el-col :span="5"><strong>¥ {{item.pricing}}</strong></el-col>
 	                <el-col :span="3">
-	                	<el-switch
-						  	v-model="value"
-						  	active-text="是"
-						  	inactive-text="否">
-						</el-switch>
+	                	<el-link v-if="item.recommend" type="info" disabled>推荐</el-link>
+	                	<el-link v-else disabled>未推荐</el-link>
+	                </el-col>
+	                <el-col :span="3">
+                        <el-tag v-if="item.status" type="success">Certified</el-tag>
+                        <el-tag v-else type="danger">Unauthorized</el-tag>
 					</el-col>
-	                <el-col :span="3"><el-button type="text" class="btn-style" @click="dialogVisible = true">More Information</el-button></el-col>
+					<el-col :span="3"><el-button type="text" class="btn-style" @click="() => onShow(item)">More Information</el-button></el-col>
 	            </el-row>
 	        </el-card>
-	        <el-card class="card-style">
-	            <el-row :gutter="20">
-	                <el-col :span="3"><strong>Wework</strong></el-col>
-	                <el-col :span="3"><strong>Provider</strong></el-col>
-	                <el-col :span="4"><strong>延平路315号</strong></el-col>
-	                <el-col :span="5"><strong>13813838438@hotmail.com</strong></el-col>
-	                <el-col :span="3"><strong>13813838438</strong></el-col>
-	                <el-col :span="3">
-	                	<el-switch
-						  	v-model="value"
-						  	active-text="是"
-						  	inactive-text="否">
-						</el-switch>
-					</el-col>
-	                <el-col :span="3"><el-button type="text" class="btn-style" @click="dialogVisible = true">More Information</el-button></el-col>
-	            </el-row>
-	        </el-card>
+
 
 	        <!-- 显示供应商更多信息 -->
 	        <el-dialog
@@ -55,28 +43,52 @@
 				:before-close="handleClose">
 				<div class="inner">
 					<div class="item">
-						<label>Address En</label>
-						<p>Yan Ping Road NO.315</p>
+						<label>Time</label>
+						<p>{{moment(showData.createTime)}}</p>
 					</div>
 					<div class="item">
-						<label>Address Cn</label>
-						<p>延平路315号</p>
+						<label>Workspace Name</label>
+						<p>{{showData.name}}</p>
+					</div>
+					<div class="item">
+						<label>Provider Name</label>
+						<p>{{showData.provider.first_name}} {{showData.provider.last_name}}</p>
+					</div>
+					<div class="item">
+						<label>Workspace Address En</label>
+						<p>{{showData.address_en}}</p>
+					</div>
+					<div class="item">
+						<label>Workspace Address Cn</label>
+						<p>{{showData.address_zh}}</p>
+					</div>
+					<div class="item">
+						<label>Pricing</label>
+						<p>¥ {{showData.pricing}}</p>
+					</div>
+					<div class="item">
+						<label>Likes Number</label>
+						<p>{{showData.likes}}</p>
+					</div>
+					<div class="item">
+						<label>Reviews Number</label>
+						<p>{{showData.reviews}}</p>
 					</div>
 					<div class="item">
 						<label>Description En</label>
-						<p>Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315 | Workspace on Yan Ping Road NO.315</p>
+						<p>{{showData.desc_en}}</p>
 					</div>
 					<div class="item">
 						<label>Description Cn</label>
-						<p>在延平路315号上的工作空间</p>
+						<p>{{showData.desc_zh}}</p>
 					</div>
 					<div class="item">
 						<label>Picture</label>
 						<p>
-							<span v-for="(item, index) in imgs" :key="index">
+							<span v-for="(item, index) in showData.photos" :key="index">
 								<el-image 
 								    style="width: 180px; height: 180px"
-								    :src="item.url" 
+								    :src="item" 
 								    fit="cover">
 							  	</el-image>
 							</span>
@@ -85,13 +97,13 @@
 					<div class="item">
 						<label>Video</label>
 						<p>
-							
+							<el-link :href="showData.video" target="_blank" type="info">Video Url Path : {{showData.video}}</el-link>
 						</p>
 					</div>
 				</div>
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="dialogVisible = false">拒绝</el-button>
-				    <el-button type="primary" @click="dialogVisible = false">接受</el-button>
+					<el-button @click="() => onDeal(false)">Unauthorized</el-button>
+				    <el-button type="primary" @click="() => onDeal(true)">Certified</el-button>
 				</span>
 			</el-dialog>
 		</div>
@@ -99,33 +111,71 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import moment from 'moment';
+import { getList, validation}  from '../../api/workspace'
 	export default {
 		data() {
 			return {
+				loading : false,
 				value: true,
 				dialogVisible: false,
-				imgs: [
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' },
-					{ url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg' }
-				]
+				listData : [],
+				imgs : [],
+				showData : {
+					provider : {}
+				}
 			}
 		},
 		methods: {
 		    handleClose(done) {
-		        this.$confirm('确认关闭？')
-	          	.then(_ => {
-		            done();
-		        })
-		        .catch(_ => {});
+		    	done();
+		        // this.$confirm('确认关闭？')
+	         //  	.then(_ => {
+		        //     done();
+		        // })
+		        // .catch(_ => {});
+		    },
+		    moment(time) {
+		    	return moment(time).format("MM-DD h:mm")
+		    },
+		    onDeal(bo) {
+		    	this.dialogVisible = false
+		    	validation({_id : this.showData._id, status : bo})
+		    	.then(doc => {
+		    		this.$message({
+	                    message: '处理成功！！',
+	                    type: 'success'
+	                });
+	                this.getData();
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('处理失败！');
+	        	})
+		    },
+		    onShow(data) {
+		    	this.dialogVisible = true
+		    	this.showData = data;
+		    },
+			getData() {
+		    	this.loading = true
+		    	getList()
+		    	.then(doc => {
+		    		this.listData = doc;
+		    		console.log('doc', doc)
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('数据获取失败');
+	        	})
+	        	.finally(() => {
+	                setTimeout(() => {
+	                    this.loading = false
+	                }, 500);
+	            })
 		    }
+		},
+		created() {
+			this.getData();
 		}
 	}
 </script>

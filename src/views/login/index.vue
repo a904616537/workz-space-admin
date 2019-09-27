@@ -4,7 +4,7 @@
 
       <div class="title-container">
         <el-avatar :size="50" :src="circleUrl" class="logo"></el-avatar>
-        <h3 class="title">Workz Space</h3>
+        <h3 class="title">Workz Space Admin</h3>
       </div>
 
       <el-form-item prop="username">
@@ -18,7 +18,6 @@
           name="username"
           type="text"
           tabindex="1"
-          auto-complete="on"
         />
       </el-form-item>
 
@@ -34,7 +33,6 @@
           placeholder="Password"
           name="password"
           tabindex="2"
-          auto-complete="on"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">

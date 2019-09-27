@@ -10,11 +10,13 @@ export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
 
+export function isEmail(email) {
+	return /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test(email);
+}
 /**
  * @param {string} str
  * @returns {Boolean}
  */
 export function validUsername(str) {
-  const valid_map = ['admin', 'editor']
-  return valid_map.indexOf(str.trim()) >= 0
+	return str.length>3
 }

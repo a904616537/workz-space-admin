@@ -21,7 +21,14 @@
 	                <el-col :span="3"><strong>{{item.name}}</strong></el-col>
 	                <el-col :span="3"><strong>{{item.provider.first_name}} {{item.provider.last_name}}</strong></el-col>
 	                <el-col :span="4"><strong>{{item.address_zh}}</strong></el-col>
-	                <el-col :span="5"><strong>¥ {{item.pricing}}</strong></el-col>
+	                <el-col :span="5">
+	                	<div v-if="(typeof item.pricing) == 'number'">
+	                		<strong>¥ {{item.pricing}}</strong>
+	                	</div>
+	                	<div v-else v-for="(price, key) in item.pricing" :key="key">
+	                		<strong>¥ {{price.price}}</strong>
+	                	</div>
+	            	</el-col>
 	                <el-col :span="3">
 	                	<el-link v-if="item.recommend" type="info" disabled>推荐</el-link>
 	                	<el-link v-else disabled>未推荐</el-link>
@@ -64,7 +71,14 @@
 					</div>
 					<div class="item">
 						<label>Pricing</label>
-						<p>¥ {{showData.pricing}}</p>
+						<div v-if="typeof showData.pricing == 'number'">
+							<p>¥ {{showData.pricing}}</p>
+						</div>
+						<div v-else v-for="(item, index) in showData.pricing" :key="index">
+							<p>
+							<span>{{item.name}}</span> <span style="margin-left: 30px;">{{item.price}}</span>
+							</p>
+						</div>
 					</div>
 					<div class="item">
 						<label>Likes Number</label>

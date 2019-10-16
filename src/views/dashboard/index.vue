@@ -6,7 +6,7 @@
                     <el-col :span="6" v-for="(item, index) in tabs" :key="index" class="box">
                         <el-card class="card-style">
                             <div @click="() => toPage(item.path)">
-                                <svg-icon :icon-class="item.icon" class="card-icon" />
+                                <svg-icon icon-class="example" class="card-icon" />
                                 <p>{{ item.name }}</p>
                             </div>
                         </el-card>

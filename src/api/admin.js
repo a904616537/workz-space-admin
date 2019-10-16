@@ -2,6 +2,13 @@ import request from '@/utils/request'
 
 const name = "admin"
 
+export function getList() {
+	return request({
+		url    : `/${name}`,
+		method : 'get'
+	})
+}
+
 export function get(_id) {
 	return request({
 		url    : `/${name}/select/${_id}`,
@@ -11,7 +18,7 @@ export function get(_id) {
 
 export function register(data) {
 	return request({
-		url: `/${name}`,
+		url: `/${name}/register`,
 		method: 'post',
 		data
 	})
@@ -30,5 +37,13 @@ export function update(data) {
 		url    : `/${name}`,
 		method : 'put',
         data
+    })
+}
+
+export function del(params) {
+	return request({
+		url    : `/${name}`,
+		method : 'delete',
+        params
     })
 }

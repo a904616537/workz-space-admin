@@ -6,7 +6,7 @@
                     <el-col :span="6" v-for="(item, index) in tabs" :key="index" class="box">
                         <el-card class="card-style">
                             <div @click="() => toPage(item.path)">
-                                <svg-icon icon-class="user" class="card-icon" />
+                                <svg-icon :icon-class="item.icon" class="card-icon" />
                                 <p>{{ item.name }}</p>
                             </div>
                         </el-card>
@@ -34,12 +34,12 @@
             return {
                 tabs : [
                     // { name: '客户管理' },
-                    { name: 'Client Wishlist', path: 'Wish'},
-                    { name: 'Account Request Management', path: 'Provider' },
-                    { name: 'Workspace Management', path: 'Space' },
-                    { name: 'Workspace Update Requests', path: 'Update' },
+                    { name: 'Client Wishlist', path: 'Wish', icon : 'tag'},
+                    { name: 'Account Request Management', path: 'Provider', icon : 'provider' },
+                    { name: 'Workspace Management', path: 'Space', icon : 'management' },
+                    { name: 'Workspace Update Requests', path: 'Update', icon : 'update' },
                     // { name: '工作空间评价管理' },
-                    { name: 'Logout', path: 'Admin' }
+                    { name: 'Logout', path: 'Admin', icon : 'admin' }
                 ]
             }
         },

@@ -2,18 +2,18 @@
 	<div class="app-container">
 		<div class="space">
 			<div>
-				<el-button type="primary" :loading="loading" size="medium" class="apply-btn" @click.native.prevent="getData">刷新</el-button>
+				<el-button type="primary" :loading="loading" size="medium" class="apply-btn" @click.native.prevent="getData">Refresh</el-button>
 			</div>
 			<el-divider></el-divider>
 			<div class="title">
 	            <el-row :gutter="20" type="flex" align="middle">
 	                <el-col :span="3">Workspace Name</el-col>
-	                <el-col :span="3">Provider Name</el-col>
-	                <el-col :span="4">Workspace Address</el-col>
+	                <el-col :span="3">Primary Contact</el-col>
+	                <el-col :span="4">Address</el-col>
 	                <el-col :span="5">Pricing</el-col>
-	                <el-col :span="3">Recommend</el-col>
+	                <el-col :span="3">Premium Location</el-col>
 	                <el-col :span="3">Status</el-col>
-	                <el-col :span="3">More</el-col>
+	                <el-col :span="3">Additional Info</el-col>
 	            </el-row>
 	        </div>
 			<el-card v-for="(item, index) in listData" :key="index" class="card-style">
@@ -30,14 +30,14 @@
 	                	</div>
 	            	</el-col>
 	                <el-col :span="3">
-	                	<el-link v-if="item.recommend" type="info" disabled>推荐</el-link>
-	                	<el-link v-else disabled>未推荐</el-link>
+	                	<el-link v-if="item.recommend" type="info" disabled>Premium</el-link>
+	                	<el-link v-else disabled>Standard</el-link>
 	                </el-col>
 	                <el-col :span="3">
-                        <el-tag v-if="item.status" type="success">Certified</el-tag>
-                        <el-tag v-else type="danger">Unauthorized</el-tag>
+                        <el-tag v-if="item.status" type="success">Approved</el-tag>
+                        <el-tag v-else type="danger">Not Approved</el-tag>
 					</el-col>
-					<el-col :span="3"><el-button type="text" class="btn-style" @click="() => onShow(item)">More Information</el-button></el-col>
+					<el-col :span="3"><el-button type="text" class="btn-style" @click="() => onShow(item)">More Info</el-button></el-col>
 	            </el-row>
 	        </el-card>
 
@@ -50,7 +50,7 @@
 				:before-close="handleClose">
 				<div class="inner">
 					<div class="item">
-						<label>Time</label>
+						<label>Time of Application</label>
 						<p>{{moment(showData.createTime)}}</p>
 					</div>
 					<div class="item">
@@ -58,15 +58,15 @@
 						<p>{{showData.name}}</p>
 					</div>
 					<div class="item">
-						<label>Provider Name</label>
+						<label>Primary Contact</label>
 						<p>{{showData.provider.first_name}} {{showData.provider.last_name}}</p>
 					</div>
 					<div class="item">
-						<label>Workspace Address En</label>
+						<label>Workspace Address in English</label>
 						<p>{{showData.address_en}}</p>
 					</div>
 					<div class="item">
-						<label>Workspace Address Cn</label>
+						<label>Workspace Address in Chinese</label>
 						<p>{{showData.address_zh}}</p>
 					</div>
 					<div class="item">
@@ -81,43 +81,43 @@
 						</div>
 					</div>
 					<div class="item">
-						<label>Likes Number</label>
+						<label>Number of Likes</label>
 						<p>{{showData.likes}}</p>
 					</div>
 					<div class="item">
-						<label>Reviews Number</label>
+						<label>Review Count</label>
 						<p>{{showData.reviews}}</p>
 					</div>
 					<div class="item">
-						<label>Description En</label>
+						<label>Description in English</label>
 						<p>{{showData.desc_en}}</p>
 					</div>
 					<div class="item">
-						<label>Description Cn</label>
+						<label>Description in Chinese</label>
 						<p>{{showData.desc_zh}}</p>
 					</div>
 					<div class="item">
-						<label>Picture</label>
+						<label>Photos</label>
 						<p>
 							<span v-for="(item, index) in showData.photos" :key="index">
-								<el-image 
+								<el-image
 								    style="width: 180px; height: 180px"
-								    :src="item" 
+								    :src="item"
 								    fit="cover">
 							  	</el-image>
 							</span>
 						</p>
 					</div>
 					<div class="item">
-						<label>Video</label>
+						<label>Video Path</label>
 						<p>
-							<el-link :href="showData.video" target="_blank" type="info">Video Url Path : {{showData.video}}</el-link>
+							<el-link :href="showData.video" target="_blank" type="info">Public URL : {{showData.video}}</el-link>
 						</p>
 					</div>
 				</div>
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="() => onDeal(false)">Unauthorized</el-button>
-				    <el-button type="primary" @click="() => onDeal(true)">Certified</el-button>
+					<el-button @click="() => onDeal(false)">Not Approved</el-button>
+				    <el-button type="primary" @click="() => onDeal(true)">Approved</el-button>
 				</span>
 			</el-dialog>
 		</div>
@@ -158,13 +158,13 @@ import { getList, validation}  from '../../api/workspace'
 		    	validation({_id : this.showData._id, status : bo})
 		    	.then(doc => {
 		    		this.$message({
-	                    message: '处理成功！！',
+	                    message: 'Successfully Executed!',
 	                    type: 'success'
 	                });
 	                this.getData();
 	        	})
 	        	.catch(err => {
-	        		this.$message.error('处理失败！');
+	        		this.$message.error('Execution Failure');
 	        	})
 		    },
 		    onShow(data) {
@@ -179,7 +179,7 @@ import { getList, validation}  from '../../api/workspace'
 		    		console.log('doc', doc)
 	        	})
 	        	.catch(err => {
-	        		this.$message.error('数据获取失败');
+	        		this.$message.error('Error Retrieving Data');
 	        	})
 	        	.finally(() => {
 	                setTimeout(() => {
@@ -212,6 +212,12 @@ import { getList, validation}  from '../../api/workspace'
 	    }
 	    .el-image {
 	    	margin-right: 5px;
+	    }
+	    .inner {
+	    	p {
+	    		line-height: 24px;
+	    		border-bottom: 1px solid #EBEEF5;
+	    	}
 	    }
 	}
 </style>

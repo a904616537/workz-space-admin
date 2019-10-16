@@ -14,7 +14,7 @@
                 </el-row>
             </el-col>
             <el-col :span="8">
-                
+
             </el-col>
         </el-row>
     </div>
@@ -34,12 +34,12 @@
             return {
                 tabs : [
                     // { name: '客户管理' },
-                    { name: '客户心愿单', path: 'Wish'},
-                    { name: '工作空间账户申请', path: 'Provider' },
-                    { name: '工作空间管理', path: 'Space' },
-                    { name: '工作空间申请更新', path: 'Update' },
+                    { name: 'Client Wishlist', path: 'Wish'},
+                    { name: 'Account Request Management', path: 'Provider' },
+                    { name: 'Workspace Management', path: 'Space' },
+                    { name: 'Workspace Update Requests', path: 'Update' },
                     // { name: '工作空间评价管理' },
-                    { name: '管理员注销', path: 'Admin' }
+                    { name: 'Logout', path: 'Admin' }
                 ]
             }
         },

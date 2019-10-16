@@ -48,7 +48,7 @@ export const constantRoutes = [
         path: 'wish',
         name: 'Wish',
         component: () => import('@/views/wish/index'),
-        meta: { title: 'Client Wish List', icon: 'table' }
+        meta: { title: 'Client Wishlist', icon: 'table' }
       }
     ]
   },
@@ -61,7 +61,7 @@ export const constantRoutes = [
       path: 'provider',
       name: 'Provider',
       component: ()=> import('@/views/provider/index'),
-      meta: {title: 'Provider', icon: 'user' }
+      meta: {title: 'Workspace Provider', icon: 'user' }
     }]
   },
 
@@ -73,7 +73,7 @@ export const constantRoutes = [
       path: 'space',
       name: 'Space',
       component: ()=> import('@/views/space/index'),
-      meta: {title: '工作空间管理', icon: 'table' }
+      meta: {title: 'Workspace Management', icon: 'table' }
     }]
   },
 
@@ -85,7 +85,7 @@ export const constantRoutes = [
       path: 'update',
       name: 'Update',
       component: ()=> import('@/views/update/index'),
-      meta: {title: '工作空间更新管理', icon: 'table' }
+      meta: {title: 'Workspace Update Requests', icon: 'table' }
     }]
   },
 

@@ -1,5 +1,8 @@
 <template>
 	<div class="app-container">
+		<div>
+			<el-button type="primary" :loading="loading" size="medium" class="apply-btn" @click.native.prevent="getData">Refresh</el-button>
+		</div>
 		<el-table
 		    :data="tableData"
 		    style="width: 100%"
@@ -9,103 +12,134 @@
 		      	<template slot-scope="props">
 		        	<el-form label-position="left" inline class="demo-table-expand">
 				        <el-form-item label="First Name">
-				            <span>{{ props.row.user }}</span>
+				            <span>{{ props.row.first_name }}</span>
 				        </el-form-item>
 		          		<el-form-item label="Email">
 		            		<span>{{ props.row.email }}</span>
 		          		</el-form-item>
 		          		<el-form-item label="Last Name">
-				            <span>{{ props.row.user }}</span>
+				            <span>{{ props.row.last_name }}</span>
 				        </el-form-item>
-		          		<el-form-item label="需求座位数">
-		            		<span>{{ props.row.seating }}</span>
+		          		<el-form-item label="Seats">
+		            		<span>{{ props.row.number }}</span>
 		          		</el-form-item>
-		          		<el-form-item label="联系电话">
+		          		<el-form-item label="Phone">
 		            		<span>{{ props.row.phone }}</span>
 		          		</el-form-item>
 		        	</el-form>
 		      	</template>
 		    </el-table-column>
 		    <el-table-column
-		      	label="公司名"
+		      	label="Company Name"
 		      	prop="company"
 				sortable
 		      	>
 		    </el-table-column>
 		    <el-table-column
 		      	label="First Name"
-		      	prop="user">
+		      	prop="first_name">
 		    </el-table-column>
 		    <el-table-column
 		      	label="Last Name"
-		      	prop="user">
+		      	prop="last_name">
 		    </el-table-column>
 		    <el-table-column
-		      	label="心愿单"
-		      	prop="wish">
+		      	label="Phone"
+		      	prop="phone">
 		    </el-table-column>
+		    <el-table-column
+		      	label="Seats"
+		      	prop="number">
+		    </el-table-column>
+		    
 		    <el-table-column align="right">
-			    <template slot="header" slot-scope="scope">
-			        <el-input
-			          	v-model="search"
-			          	size="mini"
-			          	placeholder="输入关键字搜索"/>
-			    </template>
 		      	<template slot-scope="scope">
-			        <el-button
-			          	size="mini"
-			          	type="text"
-			          	@click="handleEdit(scope.$index, scope.row)">Management</el-button>
-			        <el-button
+		      		<el-tag
+		      		v-if="scope.row.status"
+		      		type="success"
+		      		disable-transitions>Processed</el-tag>
+		      		<el-button
+		      		v-else
 	          		size="mini"
-		          	type="text"
-		          	style="color: #F56C6C"
-		          	@click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+		          	type="primary"
+		          	:loading="loading"
+		          	@click="handleDispose(scope.$index, scope.row)">Dispose</el-button>
 		      </template>
 		    </el-table-column>
 	  	</el-table>
 		<!--  分页  -->
-	  	<div class="pagination">
+<!-- 	  	<div class="pagination">
 	  		<el-pagination
 		    	layout="prev, pager, next"
 		    	:total="50">
 		  	</el-pagination>
-	  	</div>
+	  	</div> -->
 	</div>
 </template>
 
 <script>
+	import { mapState } from 'vuex'
+	import { getList, del, put}  from '../../api/contact'
 	export default{
 		data() {
 			return {
+				loading : false,
 				search: '',
-				tableData: [{
-		          email: 'a13813838438@163.com',
-		          user: 'Joan',
-		          seating: '20',
-		          wish: '南京东路',
-		          company: 'Test 1',
-		          phone: '13813838438'
-		        }, {
-		          email: 'b13813838438@163.com',
-		          user: 'Tank',
-		          seating: '7',
-		          wish: '静安寺',
-		          company: 'Test 2',
-		          phone: '13813838438'
-		        }]
+				tableData: []
 			}
 		},
 		methods: {
-			formatter(row, column) {
-		        return row.name;
-		    },
-		    handleEdit(index, row) {
-		        console.log(index, row);
-	      	},
 		    handleDelete(index, row) {
-		        console.log(index, row);
+		    	this.deleteData(index, row._id)
+		    },
+		    handleDispose(index, row) {
+		    	this.loading = true
+		    	put({_id : row._id, status : true})
+		    	.then(doc => {
+		    		this.getData();
+		    	})
+		    	.catch(err => {
+					this.$message.error('Error Retrieving Data');
+		    	})
+		    	.finally(() => {
+	                setTimeout(() => {
+	                    this.loading = false
+	                }, 500);
+	            })
+		    },
+
+		    getData() {
+		    	this.loading = true
+		    	getList()
+		    	.then(doc => {
+		    		this.tableData = doc;
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('Error Retrieving Data');
+	        	})
+	        	.finally(() => {
+	                setTimeout(() => {
+	                    this.loading = false
+	                }, 500);
+	            })
+		    },
+		    deleteData(index,_id) {
+		    	del(_id)
+		    	.then(doc => {
+		    		this.tableData.splice(index, 1);
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('Error Retrieving Data');
+	        	})
+	        	.finally(() => {
+	                setTimeout(() => {
+	                    this.loading = false
+	                }, 500);
+	            })
 		    }
+		},
+		created() {
+			this.getData();
 		}
 	}
 </script>

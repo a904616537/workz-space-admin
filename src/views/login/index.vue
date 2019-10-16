@@ -4,7 +4,7 @@
 
       <div class="title-container">
         <el-avatar :size="50" :src="circleUrl" class="logo"></el-avatar>
-        <h3 class="title">Workz Space Admin</h3>
+        <h3 class="title">Workz Space Admin Portal</h3>
       </div>
 
       <el-form-item prop="username">

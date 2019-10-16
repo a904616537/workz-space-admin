@@ -70,11 +70,11 @@
 					</div>
 				</div>
 				<span v-if="showData.status" slot="footer" class="dialog-footer">
-				    <el-button type="warning" @click="() => onDeal(true)">重置密码</el-button>
+				    <el-button type="warning" @click="() => onDeal(true)">Reset Password</el-button>
 				</span>
 				<span v-else slot="footer" class="dialog-footer">
 					<el-button @click="() => onDeal(false)">拒绝</el-button>
-				    <el-button type="primary" @click="() => onDeal(true)">接受</el-button>
+				    <el-button type="primary" @click="() => onDeal(true)">Accept</el-button>
 				</span>
 			</el-dialog>
 		</div>
@@ -108,13 +108,13 @@ import { getList, validation}  from '../../api/provider'
 		    	validation({_id : this.showData._id, status : bo})
 		    	.then(doc => {
 		    		this.$message({
-	                    message: '已邮件通知！',
+	                    message: 'Email Sent to Client!',
 	                    type: 'success'
 	                });
 	                this.getData();
 	        	})
 	        	.catch(err => {
-	        		this.$message.error('处理失败！');
+	        		this.$message.error('Execution Failure');
 	        	})
 		    },
 		    onShow(data) {
@@ -129,7 +129,7 @@ import { getList, validation}  from '../../api/provider'
 		    		console.log('doc', doc)
 	        	})
 	        	.catch(err => {
-	        		this.$message.error('数据获取失败');
+	        		this.$message.error('Error Retrieving Data');
 	        	})
 	        	.finally(() => {
 	                setTimeout(() => {

@@ -46,3 +46,24 @@ export function validation(data) {
         data
     })
 }
+
+export function updateList() {
+	return request({
+		url: `/${name}/update`,
+		method : 'get'
+	})
+}
+export function update(data) {
+	return request({
+		url: `/${name}/update`,
+		method : 'put',
+		data
+	})
+}
+export function del(params) {
+	return request({
+		url: `/${name}/update`,
+		method : 'delete',
+		params
+	})
+}

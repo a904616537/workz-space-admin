@@ -37,12 +37,12 @@
 	      	</template>
 	    </el-table-column>
 	    <el-table-column
-	      	label="Grade"
+	      	label="Premium Location"
 	      	width="220">
 	      	<template slot-scope="scope">
 	      		<el-tag
                 :type="scope.row.recommend? 'warning' : 'info'"
-                disable-transitions>{{scope.row.recommend?"Premium":"General"}}</el-tag>
+                disable-transitions>{{scope.row.recommend?"Premium":"Standard"}}</el-tag>
 	      	</template>
 	    </el-table-column>
 	    <el-table-column
@@ -51,6 +51,11 @@
 	      	width="300">
 	    </el-table-column>
   	</el-table>
+  	<el-row :gutter="20" style="flex: auto; background-color: #fdf6ec;padding: 10px;" align="middle" type="flex">
+        <el-col :span="6">Expect the address : {{data.address}}</el-col>
+        <el-col :span="6">Budget : {{data.budget}}</el-col>
+        <el-col :span="12">Requirements : {{data.other}}</el-col>
+    </el-row>
 	<div v-if="!data.status" style="margin-top: 20px; display: flex; flex-direction: column; align-items: flex-end;">
         <el-button
           	size="mini"

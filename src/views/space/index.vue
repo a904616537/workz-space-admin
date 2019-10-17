@@ -7,37 +7,41 @@
 			<el-divider></el-divider>
 			<div class="title">
 	            <el-row :gutter="20" type="flex" align="middle">
-	                <el-col :span="3">Workspace Name</el-col>
-	                <el-col :span="3">Primary Contact</el-col>
-	                <el-col :span="4">Address</el-col>
-	                <el-col :span="5">Pricing</el-col>
-	                <el-col :span="3">Premium Location</el-col>
+	                <el-col :span="4">Workspace Name</el-col>
+	                <el-col :span="2">Contact</el-col>
+	                <el-col :span="5">Address</el-col>
+	                <el-col :span="4">Pricing</el-col>
+	                <el-col :span="2">Premium Location</el-col>
 	                <el-col :span="3">Status</el-col>
-	                <el-col :span="3">Additional Info</el-col>
+	                <el-col :span="4">Additional Info</el-col>
 	            </el-row>
 	        </div>
 			<el-card v-for="(item, index) in listData" :key="index" class="card-style">
 	            <el-row :gutter="20" align="middle" type="flex">
-	                <el-col :span="3"><strong>{{item.name}}</strong></el-col>
-	                <el-col :span="3"><strong>{{item.provider.first_name}} {{item.provider.last_name}}</strong></el-col>
-	                <el-col :span="4"><strong>{{item.address_zh}}</strong></el-col>
-	                <el-col :span="5">
+	                <el-col :span="4"><strong>{{item.name}}</strong></el-col>
+	                <el-col :span="2"><strong>{{item.provider.first_name}} {{item.provider.last_name}}</strong></el-col>
+	                <el-col :span="5"><strong>{{item.address_zh}}</strong></el-col>
+	                <el-col :span="4">
 	                	<div v-if="(typeof item.pricing) == 'number'">
 	                		<strong>¥ {{item.pricing}}</strong>
 	                	</div>
 	                	<div v-else v-for="(price, key) in item.pricing" :key="key">
-	                		<strong>¥ {{price.price}}</strong>
+	                		<label style="margin-right: 1em;">{{price.name}}</label><strong>¥ {{price.price}}</strong>
 	                	</div>
 	            	</el-col>
-	                <el-col :span="3">
-	                	<el-link v-if="item.recommend" type="info" disabled>Premium</el-link>
-	                	<el-link v-else disabled>Standard</el-link>
+	                <el-col :span="2">
+	                	<el-tag v-if="item.recommend" type="warning">Premium</el-tag>
+                        <el-tag v-else type="info">Standard</el-tag>
 	                </el-col>
 	                <el-col :span="3">
                         <el-tag v-if="item.status" type="success">Approved</el-tag>
                         <el-tag v-else type="danger">Not Approved</el-tag>
 					</el-col>
-					<el-col :span="3"><el-button type="text" class="btn-style" @click="() => onShow(item)">More Info</el-button></el-col>
+					<el-col :span="4" style="text-align: center;">
+						<el-button type="text" class="btn-style" @click="() => onShow(item)">More Info</el-button>
+
+						<el-button :type="item.recommend?'info':'warning'" @click="() => onPut(item._id, !item.recommend)">{{`${item.recommend?'Demotion Standard':'Upgrade Premium'}`}}</el-button>
+					</el-col>
 	            </el-row>
 	        </el-card>
 
@@ -127,7 +131,7 @@
 <script>
 import { mapState } from 'vuex'
 import moment from 'moment';
-import { getList, validation}  from '../../api/workspace'
+import { getList, validation, put}  from '../../api/workspace'
 	export default {
 		data() {
 			return {
@@ -156,6 +160,19 @@ import { getList, validation}  from '../../api/workspace'
 		    onDeal(bo) {
 		    	this.dialogVisible = false
 		    	validation({_id : this.showData._id, status : bo})
+		    	.then(doc => {
+		    		this.$message({
+	                    message: 'Successfully Executed!',
+	                    type: 'success'
+	                });
+	                this.getData();
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('Execution Failure');
+	        	})
+		    },
+		    onPut(_id, recommend) {
+		    	put({_id, recommend})
 		    	.then(doc => {
 		    		this.$message({
 	                    message: 'Successfully Executed!',

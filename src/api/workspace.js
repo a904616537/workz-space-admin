@@ -9,6 +9,13 @@ export function create(data) {
 		data
 	})
 }
+export function put(data) {
+	return request({
+		url: `/${name}`,
+		method: 'put',
+		data
+	})
+}
 
 export function getList() {
 	return request({

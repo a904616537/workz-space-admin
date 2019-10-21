@@ -74,3 +74,11 @@ export function del(params) {
 		params
 	})
 }
+
+export function putComment(data) {
+	return request({
+		url: `/${name}/comment`,
+		method : 'put',
+		data
+	})
+}

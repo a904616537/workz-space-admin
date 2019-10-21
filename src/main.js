@@ -37,7 +37,7 @@ import { mockXHR } from '../mock'
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
-
+Vue.uploadUrl = 'http://service.workspace.h-fish.vip/upload/'
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 

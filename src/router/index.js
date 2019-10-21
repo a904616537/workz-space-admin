@@ -74,6 +74,12 @@ export const constantRoutes = [
       name: 'Space',
       component: ()=> import('@/views/space/index'),
       meta: {title: 'Workspace Management', icon: 'nested' }
+    },{
+      path: 'edit',
+      name: 'Edit',
+      component: ()=> import('@/views/space/edit'),
+      meta: {title: 'Workspace Edit', icon: 'nested' },
+      hidden : true
     }]
   },
 

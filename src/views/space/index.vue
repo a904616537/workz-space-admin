@@ -18,15 +18,15 @@
 	        </div>
 			<el-card v-for="(item, index) in listData" :key="index" class="card-style">
 	            <el-row :gutter="20" align="middle" type="flex">
-	                <el-col :span="4"><strong>{{item.name}}</strong></el-col>
-	                <el-col :span="2"><strong>{{item.provider.first_name}} {{item.provider.last_name}}</strong></el-col>
-	                <el-col :span="5"><strong>{{item.address_zh}}</strong></el-col>
+	                <el-col :span="4">{{item.name}}</el-col>
+	                <el-col :span="2">{{item.provider.first_name}} {{item.provider.last_name}}</el-col>
+	                <el-col :span="5">{{item.address_zh}}</el-col>
 	                <el-col :span="4">
 	                	<div v-if="(typeof item.pricing) == 'number'">
 	                		<strong>¥ {{item.pricing}}</strong>
 	                	</div>
 	                	<div v-else v-for="(price, key) in item.pricing" :key="key">
-	                		<label style="margin-right: 1em;">{{price.name}}</label><strong>¥ {{price.price}}</strong>
+	                		<label style="margin-right: 1em; font-weight: normal;">{{price.name}}</label><strong>¥ {{price.price}}</strong>
 	                	</div>
 	            	</el-col>
 	                <el-col :span="2">
@@ -38,9 +38,9 @@
                         <el-tag v-else type="danger">Not Approved</el-tag>
 					</el-col>
 					<el-col :span="4" style="text-align: center;">
-						<el-button type="text" class="btn-style" @click="() => onShow(item)">More Info</el-button>
+						<el-button type="primary" style="margin-left: 10px;margin-bottom: 10px;" @click="() => onShow(item)">More Info</el-button>
 
-						<el-button :type="item.recommend?'info':'warning'" @click="() => onPut(item._id, !item.recommend)">{{`${item.recommend?'Demotion Standard':'Upgrade Premium'}`}}</el-button>
+						<el-button :type="item.recommend?'info':'warning'" @click="() => onPut(item._id, !item.recommend)">{{`${item.recommend?'Demotion to Standard':'Upgrade to Premium'}`}}</el-button>
 					</el-col>
 	            </el-row>
 	        </el-card>

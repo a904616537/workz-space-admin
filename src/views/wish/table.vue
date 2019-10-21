@@ -8,7 +8,7 @@
 	    @selection-change="handleSelectionChange">
 	    <el-table-column
 	      	label="Workspace Name"
-	      	width="220">
+	      	width="280">
 	      	<template slot-scope="scope">
 		        <el-popover trigger="hover" placement="top">
 		          	<p>公司: {{ scope.row.provider.company }}</p>

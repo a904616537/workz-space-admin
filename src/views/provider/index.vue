@@ -68,6 +68,32 @@
 						<label>Description Cn</label>
 						<p>{{showData.desc_zh}}</p>
 					</div>
+					<el-radio-group v-model="tabPosition" style="margin-bottom: 10px;">
+				      	<el-radio-button label="Picture"></el-radio-button>
+				      	<el-radio-button label="Video">Video</el-radio-button>
+				    </el-radio-group>
+
+				    <div v-if="tabPosition == 'Picture'" class="item">
+						<label><el-button type="primary" size="mini" class="btn-style">Upload Pictures<i class="el-icon-upload el-icon--right"></i></el-button></label>
+						<p>
+							<span>
+								<el-image 
+								    style="width: 180px; height: 180px"
+								    src="" 
+								    fit="cover">
+							  	</el-image>
+							</span>
+						</p>
+					</div>
+					<div v-else class="item">
+			            <v-video v-if="show_edit" :onSuccess="onSuccessVideo"/>
+						<p>
+							<span>
+								<el-link href="" target="_blank" type="info">Video Url Path : </el-link>
+							</span>
+						</p>
+					</div>
+					
 				</div>
 				<span v-if="showData.status" slot="footer" class="dialog-footer">
 				    <el-button type="warning" @click="() => onDeal(true)">Reset Password</el-button>
@@ -84,14 +110,20 @@
 <script>
 import { mapState } from 'vuex'
 import { getList, validation}  from '../../api/provider'
+import Upload                          from '@/components/Upload/index'
+import UploadVideo                     from '@/components/Upload/video'
 
 	export default {
 		data() {
+			const isCreate =this.$route.query._id?false:true;
 			return {
 				loading       : false,
 				dialogVisible : false,
 				listData      : [],
-				showData      : {}
+				showData      : {},
+				tabPosition   : 'Picture',
+				show_edit : isCreate,
+				video: []
 			}
 		},
 		methods: {
@@ -136,8 +168,16 @@ import { getList, validation}  from '../../api/provider'
 	                    this.loading = false
 	                }, 500);
 	            })
-		    }
+		    },
+		    onSuccessVideo(url) {
+	        	// this.workspace.photos = [];
+	        	// this.workspace.video = url;
+	        },
 		},
+		components: {
+            'v-upload' : Upload,
+			'v-video'  : UploadVideo
+        },
 		created() {
 			this.getData();
 		}

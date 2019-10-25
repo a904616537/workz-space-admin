@@ -62,6 +62,21 @@
 				</div>
 			</div>
 			<div class="item">
+				<label>Building En</label>
+				<div>
+					<el-input v-model="workspace.addresses_en" placeholder="" v-if="show_edit" name="name" class="input-style"></el-input>
+					<p v-else>{{workspace.addresses_en}}</p>
+				</div>
+			</div>
+			<div class="item">
+				<label>Building Cn</label>
+				<div>
+					<el-input v-model="workspace.addresses_zh" placeholder="" v-if="show_edit" name="name" class="input-style"></el-input>
+					<p v-else>{{workspace.addresses_zh}}</p>
+				</div>
+			</div>
+
+			<div class="item">
 				<label>Description En</label>
 				<div>
 					<el-input v-model="workspace.desc_en" placeholder="" v-if="show_edit" name="name" class="input-style"></el-input>
@@ -132,14 +147,16 @@
 	import {getbyId, submitUpdate} from '../../api/workspace'
 
 	const formModel = {
-		name       : '',
-		area       : '',
-		address_zh : '',
-		address_en : '',
-		desc_en    : '',
-		desc_zh    : '',
-		logo       : '',
-		pricing    : [{
+		name         : '',
+		area         : '',
+		addresses_en :'',
+		addresses_zh : '',
+		address_zh   : '',
+		address_en   : '',
+		desc_en      : '',
+		desc_zh      : '',
+		logo         : '',
+		pricing      : [{
 			name : '',
 			price : 0
 		}],

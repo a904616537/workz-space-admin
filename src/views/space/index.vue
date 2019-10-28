@@ -183,7 +183,6 @@ import Table from './item'
 		    filterComment(comments) {
 		    	
 		    	const list = comments.filter(v=> v.status != 0 && v.status);
-		    	console.log('----list', list)
 		    	return list.length;
 		    },
 		    onDeal(bo) {

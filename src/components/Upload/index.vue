@@ -47,10 +47,15 @@
 		    	console.log('handleSuccess', fileList)
 		    	const list = fileList.map(v=> v.response?v.response.msg:v.url);
 		    	this.onSuccess(list)
+		    	this.$emit('input', false)
 				this.$message({
 		          	message: '上传成功！',
 		          	type: 'success'
 		        });
+		    },
+		    handleBefore(){
+		    	console.log('文件开始上传')
+		    	this.$emit('input', true)
 		    }
 		}
 	}

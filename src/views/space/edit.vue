@@ -99,7 +99,7 @@
 			</el-radio-group>
 
 			<div v-if="tabPosition == 'Picture'" class="item">
-				<label><el-button type="primary" size="mini" class="btn-style" @click.native.prevent="() => onShow('Image')">Upload Pictures<i class="el-icon-upload el-icon--right"></i></el-button></label>
+				<label v-if="show_edit"><el-button type="primary" size="mini" class="btn-style" @click.native.prevent="() => onShow('Image')">Upload Pictures<i class="el-icon-upload el-icon--right"></i></el-button></label>
 				<p>
 					<span v-for="(item, index) in workspace.photos" :key="index">
 						<el-image 
@@ -111,7 +111,7 @@
 				</p>
 			</div>
 			<div v-else class="item">
-	            <v-video v-if="show_edit" :onSuccess="onSuccessVideo"/>
+	            <v-video v-if="show_edit" :onSuccess="onSuccessVideo" v-model="disabled"/>
 				<p>
 					<span>
 						<el-link :href="workspace.video" target="_blank" type="info">Video Url Path : {{workspace.video}}</el-link>
@@ -125,25 +125,25 @@
 	            width="50%"
 	            :before-close="handleClose"
 	            class="dialog-box">
-	            <v-upload v-if="show_edit" :fileList="workspace.photos" :onSuccess="onSuccess"/>
+	            <v-upload v-if="show_edit" :fileList="workspace.photos" :onSuccess="onSuccess" v-model="disabled"/>
 
 	            <span slot="footer" class="dialog-footer">
-	              <el-button @click="dialogVisible = false">Cancel</el-button>
-	              <el-button type="primary" @click="onOk">Submit</el-button>
+	              <el-button @click="dialogVisible = false" :disabled="disabled">Cancel</el-button>
+	              <el-button type="primary" @click="onOk" :disabled="disabled">Submit</el-button>
 	            </span>
 	        </el-dialog>
 
 		</div>
 		<div v-if="show_edit" class="footer">
-			<el-button type="primary" :loading="loading" @click="onUpdate">Confirm Submission</el-button>
+			<el-button type="primary" :loading="loading" @click="onUpdate" :disabled="disabled">Confirm Submission</el-button>
 		</div>
 	</div>
 </template>
 
 <script>
-	import { mapState }                    from 'vuex'
-	import Upload                          from '@/components/Upload'
-	import UploadVideo                     from '@/components/Upload/video'
+	import { mapState }            from 'vuex'
+	import Upload                  from '@/components/Upload'
+	import UploadVideo             from '@/components/Upload/video'
 	import {getbyId, submitUpdate} from '../../api/workspace'
 
 	const formModel = {
@@ -168,6 +168,7 @@
 			const isCreate =this.$route.query._id?false:true;
 			return {
 				loading : false,
+				disabled : false,
 				tabPosition : "Picture",
 				showTopBtn : !isCreate,
 				workspace : {...formModel},

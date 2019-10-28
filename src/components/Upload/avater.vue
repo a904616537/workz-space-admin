@@ -34,10 +34,15 @@
 		    		this.$refs.uploadavatar.clearFiles();
 		    	}, 3000);
 		    	this.onSuccess(file.response.msg)
+		    	this.$emit('input', false)
 				this.$message({
 		          	message: '上传成功！',
 		          	type: 'success'
 		        });
+		    },
+		    handleBefore(){
+		    	console.log('文件开始上传')
+		    	this.$emit('input', true)
 		    }
 		}
 	}

@@ -7,13 +7,14 @@
 			<el-divider></el-divider>
 			<div class="title">
 	            <el-row :gutter="20" type="flex" align="middle">
-	                <el-col :span="4">Workspace Name</el-col>
-	                <el-col :span="2">Contact</el-col>
-	                <el-col :span="5">Address</el-col>
-	                <el-col :span="4">Pricing</el-col>
+	                <el-col :span="3">Workspace Name</el-col>
+	                <el-col :span="2" style="text-align: center;">Contact</el-col>
+	                <el-col :span="5" style="text-align: center;">Address</el-col>
+	                <el-col :span="2">Pricing</el-col>
 	                <el-col :span="2">Premium Location</el-col>
-	                <el-col :span="3">Status</el-col>
-	                <el-col :span="5" >Additional Info</el-col>
+	                <el-col :span="3"  style="text-align: center;">Status</el-col>
+	                <el-col :span="2">Reviews</el-col>
+	                <el-col :span="5" style="text-align: center;">Additional Info</el-col>
 	            </el-row>
 	        </div>
 			<el-card v-for="(item, index) in listData" :key="index" class="card-style">
@@ -32,15 +33,17 @@
 				                		<label style="margin-right: 1em; font-weight: normal;">{{price.name}}</label><strong>¥ {{price.price}}</strong>
 				                	</div>
 				            	</el-col>
-				                <el-col :span="2">
+				                <el-col :span="3">
 				                	<el-tag v-if="item.recommend" type="warning">Premium</el-tag>
 			                        <el-tag v-else type="info">Standard</el-tag>
-			                        <el-tag style="margin-top: 5px;" :type="filterComment(item.comments) < item.comments.length?'warning':''">{{filterComment(item.comments)}}/{{item.comments.length}}</el-tag>
+			                       
 				                </el-col>
 				                <el-col :span="3">
 			                        <el-tag v-if="item.status" type="success">Approved</el-tag>
 			                        <el-tag v-else type="danger">Not Approved</el-tag>
-
+								</el-col>
+								<el-col :span="2">
+			                         <el-tag style="margin-top: 5px;" :type="filterComment(item.comments) < item.comments.length?'warning':''">{{filterComment(item.comments)}}/{{item.comments.length}}</el-tag>
 								</el-col>
 								<el-col :span="6" style="text-align: center;">
 									<el-button type="primary" style="margin-left: 10px;margin-bottom: 10px;" @click="() => onShow(item)">More Info</el-button>

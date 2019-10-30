@@ -2,14 +2,16 @@
 	<div>
 	<el-table
 	    ref="multipleTable"
-	    :data="data"
+	    :data="listData"
 	    tooltip-effect="dark"
 	    style="width: 100%"
 	    @selection-change="handleSelectionChange">
 	    <el-table-column
-	      	prop="avatar"
 	      	label="Avatar"
 	      	width="200">
+	      	<template slot-scope="scope">
+	      		<el-avatar :src="scope.row.avatar"></el-avatar>
+	      	</template>
 	    </el-table-column>
 	    <el-table-column
 	      	prop="name"
@@ -57,7 +59,11 @@
 	    		type : Function,
 	    		default : () =>{}
 	    	},
-
+	    },
+	    computed : {
+	    	listData : function() {
+	    		return this.data.filter(v => v.status != 2);
+	    	}
 	    },
 	    methods: {
 	    	handleSelectionChange(val) {

@@ -3,8 +3,8 @@
 		<div class="provider">
 			<div class="title">
 	            <el-row :gutter="20" type="flex" align="middle">
-	                <el-col :span="3">Workspace Name</el-col>
-	                <el-col :span="3">Provider Name</el-col>
+	                <el-col :span="3">Company Name</el-col>
+	                <el-col :span="3">Contact Name</el-col>
 	                <el-col :span="4">Workspace Address</el-col>
 	                <el-col :span="5">Email</el-col>
 	                <el-col :span="3">Phone</el-col>
@@ -37,11 +37,11 @@
 				:before-close="handleClose">
 				<div class="inner">
 					<div class="item">
-						<label>Workspace Name</label>
+						<label>Company Name</label>
 						<p>{{showData.company}}</p>
 					</div>
 					<div class="item">
-						<label>Provider Name</label>
+						<label>Contact Name</label>
 						<p>{{showData.first_name}} {{showData.last_name}}</p>
 					</div>
 					<div class="item">
@@ -52,7 +52,7 @@
 						<label>Phone</label>
 						<p>{{showData.phone}}</p>
 					</div>
-					<div class="item">
+					<!-- <div class="item">
 						<label>Address En</label>
 						<p>{{showData.address_en}}</p>
 					</div>
@@ -67,7 +67,7 @@
 					<div class="item">
 						<label>Description Cn</label>
 						<p>{{showData.desc_zh}}</p>
-					</div>
+					</div> -->
 					<el-radio-group v-model="tabPosition" style="margin-bottom: 10px;">
 				      	<el-radio-button label="Picture"></el-radio-button>
 				      	<el-radio-button label="Video">Video</el-radio-button>

@@ -3,10 +3,9 @@
 		<div class="provider">
 			<div class="title">
 	            <el-row :gutter="20" type="flex" align="middle">
-	                <el-col :span="3">Company Name</el-col>
+	                <el-col :span="6">Company Name</el-col>
 	                <el-col :span="3">Contact Name</el-col>
-	                <el-col :span="4">Workspace Address</el-col>
-	                <el-col :span="5">Email</el-col>
+	                <el-col :span="6">Email</el-col>
 	                <el-col :span="3">Phone</el-col>
 	                <el-col :span="3">Status</el-col>
 	                <el-col :span="3">More</el-col>
@@ -15,10 +14,9 @@
 	        <el-divider></el-divider>
 			<el-card v-for="(item, index) in listData" :key="index" class="card-style">
 	            <el-row  :gutter="20" align="middle" type="flex">
-	                <el-col :span="3"><strong>{{item.company}}</strong></el-col>
+	                <el-col :span="6"><strong>{{item.company}}</strong></el-col>
 	                <el-col :span="3"><strong>{{item.first_name}} {{item.last_name}}</strong></el-col>
-	                <el-col :span="4"><strong>{{item.address_zh}}</strong></el-col>
-	                <el-col :span="5"><strong>{{item.email}}</strong></el-col>
+	                <el-col :span="6"><strong>{{item.email}}</strong></el-col>
 	                <el-col :span="3"><strong>{{item.phone}}</strong></el-col>
 	                <el-col :span="3">
 	                	<el-tag v-if="item.status" type="success">Certified</el-tag>
@@ -68,38 +66,27 @@
 						<label>Description Cn</label>
 						<p>{{showData.desc_zh}}</p>
 					</div> -->
-					<el-radio-group v-model="tabPosition" style="margin-bottom: 10px;">
-				      	<el-radio-button label="Picture"></el-radio-button>
-				      	<el-radio-button label="Video">Video</el-radio-button>
-				    </el-radio-group>
-
-				    <div v-if="tabPosition == 'Picture'" class="item">
-						<label><el-button type="primary" size="mini" class="btn-style">Upload Pictures<i class="el-icon-upload el-icon--right"></i></el-button></label>
+				    <div class="item">
+						<label>Logo</label>
 						<p>
-							<span>
+							<span >
 								<el-image 
 								    style="width: 180px; height: 180px"
-								    src="" 
-								    fit="cover">
+								    :src="showData.avatar"
+								    fit="contain">
 							  	</el-image>
-							</span>
-						</p>
-					</div>
-					<div v-else class="item">
-			            <v-video v-if="show_edit" :onSuccess="onSuccessVideo"/>
-						<p>
-							<span>
-								<el-link href="" target="_blank" type="info">Video Url Path : </el-link>
 							</span>
 						</p>
 					</div>
 					
 				</div>
 				<span v-if="showData.status" slot="footer" class="dialog-footer">
+					<el-button type="danger" @click="onDelete">Delete</el-button>
 				    <el-button type="warning" @click="() => onDeal(true)">Reset Password</el-button>
 				</span>
 				<span v-else slot="footer" class="dialog-footer">
-					<el-button @click="() => onDeal(false)">拒绝</el-button>
+					<el-button type="danger" @click="onDelete">Delete</el-button>
+					<el-button @click="() => onDeal(false)">Refused</el-button>
 				    <el-button type="primary" @click="() => onDeal(true)">Accept</el-button>
 				</span>
 			</el-dialog>
@@ -109,9 +96,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import { getList, validation}  from '../../api/provider'
-import Upload                          from '@/components/Upload/index'
-import UploadVideo                     from '@/components/Upload/video'
+import { getList, validation, del} from '../../api/provider'
+import Upload                 from '@/components/Upload/index'
+import UploadVideo            from '@/components/Upload/video'
 
 	export default {
 		data() {
@@ -168,6 +155,20 @@ import UploadVideo                     from '@/components/Upload/video'
 	                    this.loading = false
 	                }, 500);
 	            })
+		    },
+		    onDelete() {
+		    	this.dialogVisible = false
+		    	del({_id : this.showData._id})
+		    	.then(doc => {
+		    		this.$message({
+	                    message: 'Has been deleted!',
+	                    type: 'success'
+	                });
+	                this.getData();
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('Execution Failure');
+	        	})
 		    },
 		    onSuccessVideo(url) {
 	        	// this.workspace.photos = [];

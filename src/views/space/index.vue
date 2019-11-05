@@ -137,6 +137,7 @@
 					</div>
 				</div>
 				<span slot="footer" class="dialog-footer">
+					<el-button type="danger" @click="() => onDelete(showData._id)">Delete</el-button>
 					<el-button @click="() => toEdit(showData._id)">Edit</el-button>
 					<el-button @click="() => onDeal(false)">Not Approved</el-button>
 				    <el-button type="primary" @click="() => onDeal(true)">Approved</el-button>
@@ -149,7 +150,7 @@
 <script>
 import { mapState } from 'vuex'
 import moment from 'moment';
-import { getList, validation, put, putComment}  from '../../api/workspace'
+import { getList, validation, put, putComment, onDel}  from '../../api/workspace'
 import Table from './item'
 	export default {
 		data() {
@@ -187,6 +188,20 @@ import Table from './item'
 		    	
 		    	const list = comments.filter(v=> v.status != 0 && v.status);
 		    	return list.length;
+		    },
+		    onDelete(_id) {
+		    	this.dialogVisible = false
+		    	onDel(_id)
+		    	.then(doc => {
+		    		this.$message({
+	                    message: 'Has been deleted!',
+	                    type: 'success'
+	                });
+	                this.getData();
+	        	})
+	        	.catch(err => {
+	        		this.$message.error('Execution Failure');
+	        	})
 		    },
 		    onDeal(bo) {
 		    	this.dialogVisible = false

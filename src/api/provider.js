@@ -41,6 +41,14 @@ export function update(data) {
     })
 }
 
+export function del(params) {
+    return request({
+		url    : `/${name}`,
+		method : 'delete',
+        params
+    })
+}
+
 export function validation(data) {
 	return request({
 		url    : `/${name}/validation`,

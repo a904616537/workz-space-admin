@@ -83,7 +83,6 @@
 									fit="contain">
 									</el-image>
 								</el-upload>
-								ssssss
 								
 							</span>
 						</p>

@@ -36,19 +36,19 @@
 				<div class="inner">
 					<div class="item">
 						<label>Company Name</label>
-						<p>{{showData.company}}</p>
+						<p @click="() => open('Please enter the Company Name', 'company')">{{showData.company}}</p>
 					</div>
 					<div class="item">
 						<label>Contact Name</label>
-						<p>{{showData.first_name}} {{showData.last_name}}</p>
+						<p><span @click="() => open('Please enter the First Name', 'first_name')">{{showData.first_name}}</span> <span @click="() => open('Please enter the Last Name', 'last_name')">{{showData.last_name}}</span></p>
 					</div>
 					<div class="item">
 						<label>Email</label>
-						<p>{{showData.email}}</p>
+						<p @click="() => open('Please enter the email', 'email')">{{showData.email}}</p>
 					</div>
 					<div class="item">
 						<label>Phone</label>
-						<p>{{showData.phone}}</p>
+						<p @click="() => open('Please enter the phone', 'phone')">{{showData.phone}}</p>
 					</div>
 					<!-- <div class="item">
 						<label>Address En</label>
@@ -70,11 +70,20 @@
 						<label>Logo</label>
 						<p>
 							<span >
-								<el-image 
-								    style="width: 180px; height: 180px"
-								    :src="showData.avatar"
-								    fit="contain">
-							  	</el-image>
+								<el-upload
+								ref="uploadavatar"
+								:action="url"
+								:on-success="handleSuccess"
+								:on-remove="handleRemove"
+								:multiple="false"
+								:show-file-list="true">
+									<el-image 
+									style="width: 180px; height: 180px"
+									:src="showData.avatar"
+									fit="contain">
+									</el-image>
+								</el-upload>
+								
 							</span>
 						</p>
 					</div>
@@ -95,8 +104,9 @@
 </template>
 
 <script>
+	import Vue from 'vue';
 import { mapState } from 'vuex'
-import { getList, validation, del} from '../../api/provider'
+import { getList, validation, del, update} from '../../api/provider'
 import Upload                 from '@/components/Upload/index'
 import UploadVideo            from '@/components/Upload/video'
 
@@ -104,6 +114,7 @@ import UploadVideo            from '@/components/Upload/video'
 		data() {
 			const isCreate =this.$route.query._id?false:true;
 			return {
+				url : Vue.uploadUrl,
 				loading       : false,
 				dialogVisible : false,
 				listData      : [],
@@ -114,6 +125,41 @@ import UploadVideo            from '@/components/Upload/video'
 			}
 		},
 		methods: {
+			open(title, key) {
+				this.$prompt(title, 'prompt', {
+					confirmButtonText: 'ok',
+					cancelButtonText: 'cancel',
+				}).then(({ value }) => {
+					this.showData[key] = value;
+					console.log('value', value);
+					this.putData();
+				}).catch(() => {
+					this.$message({
+						type    : 'info',
+						message : '取消输入'
+					});
+				});
+			},
+			putData() {
+				update(this.showData)
+				.then(doc => {
+
+				})
+				.catch(err => {
+	        		this.$message.error('Execution Failure');
+				})
+			},
+			handleRemove(file, fileList) {
+		        // console.log(file, fileList);
+		    },
+		    handleSuccess(response,file,fileList) {
+		    	this.showData.avatar = file.response.msg;
+		    	this.putData();
+				this.$message({
+		          	message: '上传成功！',
+		          	type: 'success'
+		        });
+		    },
 		    handleClose(done) {
 		            done();
 		        // this.$confirm('确认关闭？')

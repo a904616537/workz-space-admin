@@ -115,6 +115,7 @@
 				<p>
 					<span>
 						<el-link :href="workspace.video" target="_blank" type="info">Video Url Path : {{workspace.video}}</el-link>
+						<el-button v-if="showDeleteVideo" type="danger" @click="onRemoveVideo">Delete</el-button>
 					</span>
 				</p>
 			</div>
@@ -228,6 +229,10 @@
 			}
 		},
 		computed : {
+			showDeleteVideo : function() {
+				if(this.show_edit && !!this.workspace.video) return true;
+				else return false;
+			}
 	    },
 		components: {
 			'v-upload' : Upload,
@@ -261,6 +266,9 @@
 	        onSuccessVideo(url) {
 	        	// this.workspace.photos = [];
 	        	this.workspace.video = url;
+	        },
+	        onRemoveVideo() {
+	        	this.workspace.video = '';
 	        },
 	        onUpdate() {
 	        	this.loading = true
